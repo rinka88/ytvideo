@@ -71,67 +71,68 @@ class YtVideobtn extends CMSPlugin
             // And the JS to control it will also be added below.
 
             // Get the modal HTML content from the layout file.
-            ob_start();
-            include $layoutPath; // $name is available in the scope of default.php
-            $modalHtmlString = ob_get_clean();
+            // ob_start();
+            // include $layoutPath; // $name is available in the scope of default.php
+            // $modalHtmlString = ob_get_clean();
 
             // JavaScript to handle modal HTML injection and event binding
-            $editorIdJs = json_encode($name);
-            $modalHtmlJsString = json_encode($modalHtmlString);
+            // $editorIdJs = json_encode($name);
+            // $modalHtmlJsString = json_encode($modalHtmlString);
 
-            $js = "
-            document.addEventListener('DOMContentLoaded', function() {
-                // Ensure modal HTML is in the document body
-                if (!document.getElementById('ytvideo-modal')) {
-                    document.body.insertAdjacentHTML('beforeend', {$modalHtmlJsString});
-                }
+            // $js = "
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     // Ensure modal HTML is in the document body
+            //     if (!document.getElementById('ytvideo-modal')) {
+            //         document.body.insertAdjacentHTML('beforeend', {$modalHtmlJsString});
+            //     }
 
-                const editorIdForModal = {$editorIdJs};
-                const ytModalElement = document.getElementById('ytvideo-modal');
-                const ytVideoInsertButton = document.getElementById('ytvideo_insert_button');
+            //     const editorIdForModal = {$editorIdJs};
+            //     const ytModalElement = document.getElementById('ytvideo-modal');
+            //     const ytVideoInsertButton = document.getElementById('ytvideo_insert_button');
 
-                function urlcheckYtvideo(url) {
-                    return url.startsWith('http://') || url.startsWith('https://');
-                }
+            //     function urlcheckYtvideo(url) {
+            //         return url.startsWith('http://') || url.startsWith('https://');
+            //     }
 
-                if (ytVideoInsertButton && ytModalElement) {
-                    ytVideoInsertButton.addEventListener('click', function() {
-                        const url = document.getElementById('ytvideo_url_field').value.trim();
-                        const ratio = document.getElementById('ytvideo_ratio_field').value;
-                        const title = document.getElementById('ytvideo_title_field').value.trim();
+            //     if (ytVideoInsertButton && ytModalElement) {
+            //         ytVideoInsertButton.addEventListener('click', function() {
+            //             const url = document.getElementById('ytvideo_url_field').value.trim();
+            //             const ratio = document.getElementById('ytvideo_ratio_field').value;
+            //             const title = document.getElementById('ytvideo_title_field').value.trim();
 
-                        if (url !== '' && urlcheckYtvideo(url)) {
-                            let insertText = '{ytvideo ' + url + '|' + ratio;
-                            if (title !== '') {
-                                insertText += '|' + title;
-                            }
-                            insertText += '}';
+            //             if (url !== '' && urlcheckYtvideo(url)) {
+            //                 let insertText = '{ytvideo ' + url + '|' + ratio;
+            //                 if (title !== '') {
+            //                     insertText += '|' + title;
+            //                 }
+            //                 insertText += '}';
 
-                            if (Joomla.editors && Joomla.editors.instances && Joomla.editors.instances[editorIdForModal]) {
-                                Joomla.editors.instances[editorIdForModal].replaceSelection(insertText);
-                            } else {
-                                console.error('YTVIDEOBTN: Joomla editor instance not found for ID: ' + editorIdForModal);
-                                alert(" . json_encode(Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_ALERT_EDITOR_NOT_FOUND')) . ");
-                            }
-                        } else {
-                            alert(" . json_encode(Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_ALERT_INVALID_URL')) . ");
-                        }
+            //                 if (Joomla.editors && Joomla.editors.instances && Joomla.editors.instances[editorIdForModal]) {
+            //                     Joomla.editors.instances[editorIdForModal].replaceSelection(insertText);
+            //                 } else {
+            //                     console.error('YTVIDEOBTN: Joomla editor instance not found for ID: ' + editorIdForModal);
+            //                     alert(" . json_encode(Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_ALERT_EDITOR_NOT_FOUND')) . ");
+            //                 }
+            //             } else {
+            //                 alert(" . json_encode(Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_ALERT_INVALID_URL')) . ");
+            //             }
 
-                        const ytVideoModalInstance = bootstrap.Modal.getInstance(ytModalElement);
-                        if (ytVideoModalInstance) {
-                            ytVideoModalInstance.hide();
-                        }
-                    });
-                } else {
-                    if (!ytVideoInsertButton) console.error('YTVIDEOBTN: Insert button #ytvideo_insert_button not found.');
-                    if (!ytModalElement) console.error('YTVIDEOBTN: Modal element #ytvideo-modal not found after attempting to add it.');
-                }
-            });
-            ";
-            $this->app->getDocument()->addScriptDeclaration($js);
+            //             const ytVideoModalInstance = bootstrap.Modal.getInstance(ytModalElement);
+            //             if (ytVideoModalInstance) {
+            //                 ytVideoModalInstance.hide();
+            //             }
+            //         });
+            //     } else {
+            //         if (!ytVideoInsertButton) console.error('YTVIDEOBTN: Insert button #ytvideo_insert_button not found.');
+            //         if (!ytModalElement) console.error('YTVIDEOBTN: Modal element #ytvideo-modal not found after attempting to add it.');
+            //     }
+            // });
+            // ";
+            // $this->app->getDocument()->addScriptDeclaration($js);
 
             $button = new DataObject();
-            $button->set('text', Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_BUTTON_TEXT'));
+            // $button->set('text', Text::_('PLG_EDITORS-XTD_YTVIDEOBTN_BUTTON_TEXT'));
+            $button->set('text', 'Test YT Button'); // Basic text
             $button->set('name', 'ytvideo'); // Icon name or CSS class
             $button->set('class', 'btn btn-danger'); // Original class
             $button->set('iconSVG', '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 48" width="32" height="17"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49-5.41,5.42-6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg>');
