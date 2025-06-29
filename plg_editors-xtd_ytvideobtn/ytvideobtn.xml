@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.7" type="plugin" group="editors-xtd" method="upgrade">
+<extension version="5.0" type="plugin" group="editors-xtd" method="upgrade">
     <name>PLG_EDITORS-XTD_YTVIDEOBTN</name>
     <author>Aleksey A. Morozov</author>
     <authorEmail>alekvolsk@yandex.ru</authorEmail>
     <authorUrl>https://alekvolsk.pw</authorUrl>
     <copyright>(C) Aleksey A. Morozov. All right reserved.</copyright>
     <license>GNU General Public License version 3 or later; see http://www.gnu.org/licenses/gpl-3.0.txt</license>
-    <creationDate>July 2022</creationDate>
-    <version>1.8.4</version>
+    <creationDate>July 2022</creationDate> <!-- This can be updated to current date upon release -->
+    <version>2.0.0-j5</version>
     <description>PLG_EDITORS-XTD_YTVIDEOBTN_XML_DESCRIPTION</description>
-    <scriptfile>script.php</scriptfile>
+    <scriptfile class="AlekVolsk\Plugin\EditorsXtd\YtVideobtn\Installer\Script">script.php</scriptfile>
+    <targetplatform name="joomla" version="5.*" />
+    <php_minimum>8.1</php_minimum>
     <files>
         <filename plugin="ytvideobtn">ytvideobtn.php</filename>
         <folder>tmpl</folder>

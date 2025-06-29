@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_content_ytvideo",
+  "version": "2.0.0-j5",
+  "description": "Assets for YTVideo Content Plugin",
+  "license": "GPL-3.0-or-later",
+  "assets": [
+    {
+      "name": "plg_content_ytvideo.style",
+      "type": "style",
+      "uri": "plg_content_ytvideo/css/ytvideo.css",
+      "dependencies": [],
+      "attributes": {
+        "version": "2.0.0-j5"
+      },
+      "version": "2.0.0-j5"
+    },
+    {
+      "name": "plg_content_ytvideo.script",
+      "type": "script",
+      "uri": "plg_content_ytvideo/js/ytvideo.js",
+      "dependencies": [],
+      "attributes": {
+        "version": "2.0.0-j5",
+        "defer": true
+      },
+      "version": "2.0.0-j5"
+    }
+  ]
+}

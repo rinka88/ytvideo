@@ -1,20 +1,28 @@
 <?xml version="1.0"?>
-<extension type="plugin" version="3.7" method="upgrade" group="content">
+<extension type="plugin" version="5.0" method="upgrade" group="content">
     <name>PLG_YTVIDEO</name>
     <author>Aleksey A. Morozov</author>
     <authorEmail>alekvolsk@yandex.ru</authorEmail>
     <authorUrl>https://alekvolsk.pw</authorUrl>
     <copyright>(C) Aleksey A. Morozov. All right reserved.</copyright>
     <license>GNU General Public License version 3 or later; see http://www.gnu.org/licenses/gpl-3.0.txt</license>
-    <creationDate>December 2022</creationDate>
-    <version>1.8.9</version>
+    <creationDate>December 2022</creationDate> <!-- This can be updated to current date upon release -->
+    <version>2.0.0-j5</version>
     <description>PLG_YTVIDEO_DESC</description>
-    <scriptfile>script.php</scriptfile>
+    <scriptfile class="AlekVolsk\Plugin\Content\YtVideo\Installer\Script">script.php</scriptfile>
+    <targetplatform name="joomla" version="5.*" />
+    <php_minimum>8.1</php_minimum>
     <files>
         <filename plugin="ytvideo">ytvideo.php</filename>
-        <folder>assets</folder>
+        <!-- <folder>assets</folder> Removed, assets moved to media -->
         <folder>tmpl</folder>
     </files>
+    <media destination="plg_content_ytvideo" folder="media">
+        <filename>joomla.asset.json</filename>
+        <folder>css</folder>
+        <folder>js</folder>
+        <folder>images</folder>
+    </media>
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.plg_content_ytvideo.ini</language>
         <language tag="en-GB">en-GB/en-GB.plg_content_ytvideo.sys.ini</language>
@@ -39,7 +47,7 @@
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
                 </field>
-                <field name="emptyimg" type="media" label="PLG_YTVIDEO_EMPTYIMG" description="PLG_YTVIDEO_EMPTYIMG_DESC" class="input-xlarge" default="plugins/content/ytvideo/assets/empty.png" />
+                <field name="emptyimg" type="media" label="PLG_YTVIDEO_EMPTYIMG" description="PLG_YTVIDEO_EMPTYIMG_DESC" class="input-xlarge" default="media/plg_content_ytvideo/images/empty.webp" />
                 <field name="oldframes" type="radio" label="PLG_YTVIDEO_OLDFRAMES" description="PLG_YTVIDEO_OLDFRAMES_DESC" class="btn-group btn-yesno" default="0">
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>

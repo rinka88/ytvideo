@@ -5,27 +5,45 @@
  * @subpackage  Content.ytvideo
  * @copyright   Copyright (C) Aleksey A. Morozov. All rights reserved.
  * @license     GNU General Public License version 3 or later; see http://www.gnu.org/licenses/gpl-3.0.txt
- *
- * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  */
+
+namespace AlekVolsk\Plugin\Content\YtVideo;
+
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\FileSystem\Path;
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper; // Will be reviewed for Web Asset Manager
+use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Document\Document;
 
-// phpcs:disable PSR1.Files.SideEffects
-\defined('_JEXEC') or die;
-// phpcs:enable PSR1.Files.SideEffects
-
-class PlgContentYtvideo extends CMSPlugin
+class YtVideo extends CMSPlugin
 {
+    /**
+     * Application object.
+     *
+     * @var    CMSApplication
+     * @since  2.0.0-j5
+     */
+    protected $app;
+
+    /**
+     * Database object.
+     *
+     * @var    DatabaseInterface
+     * @since  2.0.0-j5
+     */
+    protected $db;
+
     public function onContentPrepare($context, &$article, &$params, $page = 0)
     {
-        if ($context == 'com_finder.indexer') {
+        // Do not run in content plugins in the finder (indexer)
+        if ($context === 'com_finder.indexer') {
             return false;
         }
 
@@ -87,7 +105,7 @@ class PlgContentYtvideo extends CMSPlugin
             return false;
         }
 
-        $cachFolder = Path::clean(Factory::getConfig()->get('cache_path', JPATH_CACHE));
+        $cachFolder = Path::clean($this->app->get('cache_path', JPATH_CACHE));
         $cachFolder = str_replace('administrator' . DIRECTORY_SEPARATOR, '', $cachFolder);
         $cachFolder = $cachFolder . DIRECTORY_SEPARATOR . 'plg_content_ytvideo' . DIRECTORY_SEPARATOR;
         if ($cachFolder && !is_dir($cachFolder)) {
@@ -98,17 +116,15 @@ class PlgContentYtvideo extends CMSPlugin
         $format = $this->params->get('format', '16-9');
         $mute = (int) $this->params->get('mute', 0);
 
-        Factory::getDocument()->addScriptDeclaration('window.ytvideo_mute = ' . $mute);
+        // Use $this->app which is available in CMSPlugin
+        $doc = $this->app->getDocument();
+        $doc->addScriptDeclaration('window.ytvideo_mute = ' . $mute);
 
-        HTMLHelper::script('plugins/content/ytvideo/assets/ytvideo.js', [], ['options' => ['version' => 'auto']]);
+        $wa = $doc->getWebAssetManager();
+        $wa->useScript('plg_content_ytvideo.script');
 
         if ($this->params->get('includes') == '1') {
-            $css = str_replace(JPATH_ROOT, '', dirname($layout) . '/' . basename($layout, '.php') . '.css');
-            if (!file_exists(JPATH_ROOT . $css)) {
-                $css = 'plugins/content/ytvideo/assets/ytvideo.css';
-            }
-            $css = str_replace('\\', '/', $css);
-            HTMLHelper::stylesheet($css, [], ['options' => ['version' => 'auto']]);
+            $wa->useStyle('plg_content_ytvideo.style');
         }
 
         foreach ($results[1] as $key => $link) {
@@ -166,9 +182,9 @@ class PlgContentYtvideo extends CMSPlugin
                         }
                         foreach (['.webp', '.jpg'] as $ext) {
                             $image = 'https://i.ytimg.com/vi/' . $id . '/' . $img . $ext;
-                            $headers = get_headers($image);
+                            $headers = @get_headers($image); // Suppress errors if URL is invalid
                             if (is_array($headers) && strpos($headers[0], ' 200') > 0) {
-                                $buffer = file_get_contents($image);
+                                $buffer = @file_get_contents($image); // Suppress errors
                                 if ((bool) $buffer !== false) {
                                     $resultImage = true;
                                     if ($cachFolder) {
